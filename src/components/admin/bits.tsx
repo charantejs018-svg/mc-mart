@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useRealtime } from "@/lib/shop";
+import { toast } from "sonner";
+import { statusLabel, useRealtime, type OrderStatus } from "@/lib/shop";
 
 export function PageHeader({ title, sub, action }: { title: string; sub?: string; action?: ReactNode }) {
   return (
@@ -50,3 +51,10 @@ export function useAllUsers() {
     },
   });
 }
+
+export async function setOrderStatus(id: string, status: OrderStatus) {
+  const { error } = await supabase.from("orders").update({ status }).eq("id", id);
+  if (error) toast.error(error.message);
+  else toast.success(`Status updated to ${statusLabel(status)}`);
+}
+

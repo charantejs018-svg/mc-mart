@@ -1,24 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, Eye } from "lucide-react";
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-import { PageHeader, Panel, useAllOrders } from "@/components/admin/bits";
+import { PageHeader, Panel, setOrderStatus, useAllOrders } from "@/components/admin/bits";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
 import { ALL_STATUSES, inr, paymentLabel, statusLabel, statusTone, type OrderStatus } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/orders/")({
   head: () => ({ meta: [{ title: "Orders — ShopKart Admin" }, { name: "description", content: "Manage ShopKart customer orders." }, { property: "og:title", content: "Orders — ShopKart Admin" }, { property: "og:description", content: "Manage orders." }] }),
   component: AdminOrders,
 });
-
-export async function setOrderStatus(id: string, status: OrderStatus) {
-  const { error } = await supabase.from("orders").update({ status }).eq("id", id);
-  if (error) toast.error(error.message);
-  else toast.success(`Status updated to ${statusLabel(status)}`);
-}
 
 function AdminOrders() {
   const { data: orders = [], isLoading } = useAllOrders();
