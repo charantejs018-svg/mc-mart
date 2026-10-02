@@ -23,7 +23,10 @@ function AuthPage() {
         </Link>
         <AuthForm allowRegister onDone={(isAdmin) => navigate({ to: isAdmin ? "/admin" : "/" })} />
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Store admin? <Link to="/admin-login" className="font-semibold text-primary">Admin login</Link>
+          Store admin?{" "}
+          <Link to="/admin-login" className="font-semibold text-primary">
+            Admin login
+          </Link>
         </p>
       </div>
     </div>

@@ -6,7 +6,14 @@ import { ProductForm } from "@/components/admin/ProductForm";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin/products/add")({
-  head: () => ({ meta: [{ title: "Add Product — ShopKart Admin" }, { name: "description", content: "Add a new product to ShopKart." }, { property: "og:title", content: "Add Product — ShopKart Admin" }, { property: "og:description", content: "Add a product." }] }),
+  head: () => ({
+    meta: [
+      { title: "Add Product — ShopKart Admin" },
+      { name: "description", content: "Add a new product to ShopKart." },
+      { property: "og:title", content: "Add Product — ShopKart Admin" },
+      { property: "og:description", content: "Add a product." },
+    ],
+  }),
   component: AddProduct,
 });
 

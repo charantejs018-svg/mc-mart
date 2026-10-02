@@ -16,8 +16,15 @@ export const Route = createFileRoute("/access-denied")({
       <div>
         <ShieldX className="mx-auto h-14 w-14 text-destructive" />
         <h1 className="mt-4 text-3xl font-bold">Access Denied</h1>
-        <p className="mt-2 text-muted-foreground">The admin panel is only available to administrators.</p>
-        <Link to="/" className="mt-6 inline-block rounded-full bg-primary px-5 py-2.5 font-semibold text-primary-foreground">Back to store</Link>
+        <p className="mt-2 text-muted-foreground">
+          The admin panel is only available to administrators.
+        </p>
+        <Link
+          to="/"
+          className="mt-6 inline-block rounded-full bg-primary px-5 py-2.5 font-semibold text-primary-foreground"
+        >
+          Back to store
+        </Link>
       </div>
     </div>
   ),

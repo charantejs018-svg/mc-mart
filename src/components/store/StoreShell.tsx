@@ -53,10 +53,17 @@ export function StoreShell({ children }: { children: ReactNode }) {
             />
           </form>
           <nav className="ml-auto flex items-center gap-1">
-            <Link to="/products" className="hidden rounded-full px-3 py-2 text-sm font-semibold hover:bg-muted sm:block">
+            <Link
+              to="/products"
+              className="hidden rounded-full px-3 py-2 text-sm font-semibold hover:bg-muted sm:block"
+            >
               Shop
             </Link>
-            <Link to="/cart" className="relative rounded-full p-2.5 hover:bg-muted" aria-label="Cart">
+            <Link
+              to="/cart"
+              className="relative rounded-full p-2.5 hover:bg-muted"
+              aria-label="Cart"
+            >
               <ShoppingCart className="h-5 w-5" />
               {count > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 grid h-5 min-w-5 place-items-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
@@ -75,18 +82,30 @@ export function StoreShell({ children }: { children: ReactNode }) {
                   <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/profile"><User className="mr-2 h-4 w-4" />Profile</Link>
+                    <Link to="/profile">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/orders"><Package className="mr-2 h-4 w-4" />My Orders</Link>
+                    <Link to="/orders">
+                      <Package className="mr-2 h-4 w-4" />
+                      My Orders
+                    </Link>
                   </DropdownMenuItem>
                   {isAdmin && (
                     <DropdownMenuItem asChild>
-                      <Link to="/admin"><LayoutDashboard className="mr-2 h-4 w-4" />Admin Panel</Link>
+                      <Link to="/admin">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        Admin Panel
+                      </Link>
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={signOut}><LogOut className="mr-2 h-4 w-4" />Logout</DropdownMenuItem>
+                  <DropdownMenuItem onClick={signOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
@@ -124,15 +143,25 @@ export function StoreShell({ children }: { children: ReactNode }) {
       <footer className="mt-16 bg-secondary text-secondary-foreground">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:grid-cols-3">
           <div>
-            <p className="font-display text-2xl font-extrabold">Shop<span className="text-primary">Kart</span></p>
-            <p className="mt-2 text-sm opacity-70">Everyday tech, fashion and gear — delivered fast.</p>
+            <p className="font-display text-2xl font-extrabold">
+              Shop<span className="text-primary">Kart</span>
+            </p>
+            <p className="mt-2 text-sm opacity-70">
+              Everyday tech, fashion and gear — delivered fast.
+            </p>
           </div>
           <div className="text-sm">
             <p className="font-semibold">Shop</p>
             <ul className="mt-2 space-y-1 opacity-70">
-              <li><Link to="/products">All products</Link></li>
-              <li><Link to="/cart">Cart</Link></li>
-              <li><Link to="/orders">Track orders</Link></li>
+              <li>
+                <Link to="/products">All products</Link>
+              </li>
+              <li>
+                <Link to="/cart">Cart</Link>
+              </li>
+              <li>
+                <Link to="/orders">Track orders</Link>
+              </li>
             </ul>
           </div>
           <div className="text-sm">
@@ -144,7 +173,9 @@ export function StoreShell({ children }: { children: ReactNode }) {
             </ul>
           </div>
         </div>
-        <p className="border-t border-white/10 py-4 text-center text-xs opacity-60">© {new Date().getFullYear()} ShopKart</p>
+        <p className="border-t border-white/10 py-4 text-center text-xs opacity-60">
+          © {new Date().getFullYear()} ShopKart
+        </p>
       </footer>
     </div>
   );

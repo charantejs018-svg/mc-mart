@@ -10,7 +10,14 @@ import { finalPrice, inr } from "@/lib/shop";
 import { Summary, useCartTotals } from "@/components/store/order-bits";
 
 export const Route = createFileRoute("/_authenticated/cart")({
-  head: () => ({ meta: [{ title: "Your Cart — ShopKart" }, { name: "description", content: "Review items in your ShopKart cart." }, { property: "og:title", content: "Your Cart — ShopKart" }, { property: "og:description", content: "Review items in your cart." }] }),
+  head: () => ({
+    meta: [
+      { title: "Your Cart — ShopKart" },
+      { name: "description", content: "Review items in your ShopKart cart." },
+      { property: "og:title", content: "Your Cart — ShopKart" },
+      { property: "og:description", content: "Review items in your cart." },
+    ],
+  }),
   component: CartPage,
 });
 
@@ -21,7 +28,10 @@ function CartPage() {
 
   const setQty = async (id: string, q: number, stock: number) => {
     if (q < 1) return;
-    if (q > stock) { toast.error("Not enough stock"); return; }
+    if (q > stock) {
+      toast.error("Not enough stock");
+      return;
+    }
     const { error } = await supabase.from("cart_items").update({ quantity: q }).eq("id", id);
     if (error) toast.error(error.message);
     qc.invalidateQueries({ queryKey: ["cart"] });
@@ -42,28 +52,63 @@ function CartPage() {
           <div className="mt-8 rounded-3xl border bg-card p-14 text-center">
             <ShoppingBag className="mx-auto h-12 w-12 text-muted-foreground" />
             <p className="mt-4 text-lg font-semibold">Your cart is empty</p>
-            <Button asChild className="mt-6 rounded-full"><Link to="/products">Start shopping</Link></Button>
+            <Button asChild className="mt-6 rounded-full">
+              <Link to="/products">Start shopping</Link>
+            </Button>
           </div>
         ) : (
           <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_340px]">
             <ul className="space-y-3">
               {t.items.map((c) => {
-                const fp = finalPrice({ price: Number(c.products.price), discount: Number(c.products.discount) });
+                const fp = finalPrice({
+                  price: Number(c.products.price),
+                  discount: Number(c.products.discount),
+                });
                 return (
                   <li key={c.id} className="flex gap-4 rounded-2xl border bg-card p-4">
-                    <img src={c.products.image_url ?? ""} alt={c.products.name} className="h-24 w-24 rounded-xl object-cover" />
+                    <img
+                      src={c.products.image_url ?? ""}
+                      alt={c.products.name}
+                      className="h-24 w-24 rounded-xl object-cover"
+                    />
                     <div className="flex flex-1 flex-col">
-                      <Link to="/products/$id" params={{ id: c.product_id }} className="font-semibold hover:text-primary">{c.products.name}</Link>
+                      <Link
+                        to="/products/$id"
+                        params={{ id: c.product_id }}
+                        className="font-semibold hover:text-primary"
+                      >
+                        {c.products.name}
+                      </Link>
                       <p className="text-sm text-muted-foreground">{inr(fp)} each</p>
                       <div className="mt-auto flex items-center justify-between">
                         <div className="flex items-center rounded-full border">
-                          <button className="p-2" onClick={() => setQty(c.id, c.quantity - 1, c.products.stock)} aria-label="Decrease"><Minus className="h-3.5 w-3.5" /></button>
-                          <span className="w-7 text-center text-sm font-semibold">{c.quantity}</span>
-                          <button className="p-2" onClick={() => setQty(c.id, c.quantity + 1, c.products.stock)} aria-label="Increase"><Plus className="h-3.5 w-3.5" /></button>
+                          <button
+                            className="p-2"
+                            onClick={() => setQty(c.id, c.quantity - 1, c.products.stock)}
+                            aria-label="Decrease"
+                          >
+                            <Minus className="h-3.5 w-3.5" />
+                          </button>
+                          <span className="w-7 text-center text-sm font-semibold">
+                            {c.quantity}
+                          </span>
+                          <button
+                            className="p-2"
+                            onClick={() => setQty(c.id, c.quantity + 1, c.products.stock)}
+                            aria-label="Increase"
+                          >
+                            <Plus className="h-3.5 w-3.5" />
+                          </button>
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="font-bold">{inr(fp * c.quantity)}</span>
-                          <button onClick={() => remove(c.id)} className="text-muted-foreground hover:text-destructive" aria-label="Remove"><Trash2 className="h-4 w-4" /></button>
+                          <button
+                            onClick={() => remove(c.id)}
+                            className="text-muted-foreground hover:text-destructive"
+                            aria-label="Remove"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -74,7 +119,9 @@ function CartPage() {
             <aside className="h-fit rounded-2xl border bg-card p-5">
               <h2 className="mb-4 text-lg font-bold">Order summary</h2>
               <Summary t={t} />
-              <Button asChild size="lg" className="mt-5 w-full rounded-full"><Link to="/checkout">Proceed to checkout</Link></Button>
+              <Button asChild size="lg" className="mt-5 w-full rounded-full">
+                <Link to="/checkout">Proceed to checkout</Link>
+              </Button>
             </aside>
           </div>
         )}

@@ -9,7 +9,12 @@ type AuthState = {
   loading: boolean;
 };
 
-const AuthContext = createContext<AuthState>({ user: null, session: null, isAdmin: false, loading: true });
+const AuthContext = createContext<AuthState>({
+  user: null,
+  session: null,
+  isAdmin: false,
+  loading: true,
+});
 
 export async function fetchIsAdmin(userId: string) {
   const { data } = await supabase.rpc("has_role", { _user_id: userId, _role: "admin" });
@@ -17,7 +22,12 @@ export async function fetchIsAdmin(userId: string) {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({ user: null, session: null, isAdmin: false, loading: true });
+  const [state, setState] = useState<AuthState>({
+    user: null,
+    session: null,
+    isAdmin: false,
+    loading: true,
+  });
 
   useEffect(() => {
     const apply = async (session: Session | null) => {

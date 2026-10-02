@@ -20,7 +20,15 @@ export const productSchema = z.object({
 });
 export type ProductInput = z.infer<typeof productSchema>;
 
-export function ProductForm({ initial, submitLabel, onSubmit }: { initial?: Product; submitLabel: string; onSubmit: (v: ProductInput) => Promise<void> }) {
+export function ProductForm({
+  initial,
+  submitLabel,
+  onSubmit,
+}: {
+  initial?: Product;
+  submitLabel: string;
+  onSubmit: (v: ProductInput) => Promise<void>;
+}) {
   const { data: categories } = useCategories();
   const [busy, setBusy] = useState(false);
   const [preview, setPreview] = useState(initial?.image_url ?? "");
@@ -28,7 +36,10 @@ export function ProductForm({ initial, submitLabel, onSubmit }: { initial?: Prod
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const parsed = productSchema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
-    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
+      return;
+    }
     setBusy(true);
     try {
       await onSubmit(parsed.data);
@@ -40,23 +51,104 @@ export function ProductForm({ initial, submitLabel, onSubmit }: { initial?: Prod
   return (
     <form onSubmit={submit} className="grid gap-6 lg:grid-cols-[1fr_280px]">
       <div className="grid gap-4 rounded-xl border bg-card p-6 sm:grid-cols-2">
-        <div className="space-y-1.5 sm:col-span-2"><Label htmlFor="name">Product name *</Label><Input id="name" name="name" defaultValue={initial?.name} required /></div>
-        <div className="space-y-1.5 sm:col-span-2"><Label htmlFor="description">Description *</Label><Textarea id="description" name="description" rows={4} defaultValue={initial?.description ?? ""} required /></div>
+        <div className="space-y-1.5 sm:col-span-2">
+          <Label htmlFor="name">Product name *</Label>
+          <Input id="name" name="name" defaultValue={initial?.name} required />
+        </div>
+        <div className="space-y-1.5 sm:col-span-2">
+          <Label htmlFor="description">Description *</Label>
+          <Textarea
+            id="description"
+            name="description"
+            rows={4}
+            defaultValue={initial?.description ?? ""}
+            required
+          />
+        </div>
         <div className="space-y-1.5">
           <Label htmlFor="category_id">Category *</Label>
-          <select id="category_id" name="category_id" defaultValue={initial?.category_id ?? ""} required className="h-9 w-full rounded-md border bg-card px-3 text-sm">
-            <option value="" disabled>Select…</option>
-            {categories?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+          <select
+            id="category_id"
+            name="category_id"
+            defaultValue={initial?.category_id ?? ""}
+            required
+            className="h-9 w-full rounded-md border bg-card px-3 text-sm"
+          >
+            <option value="" disabled>
+              Select…
+            </option>
+            {categories?.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="space-y-1.5"><Label htmlFor="price">Price (₹) *</Label><Input id="price" name="price" type="number" step="0.01" min="0" defaultValue={initial?.price} required /></div>
-        <div className="space-y-1.5"><Label htmlFor="discount">Discount (%)</Label><Input id="discount" name="discount" type="number" step="0.01" min="0" max="100" defaultValue={initial?.discount ?? 0} /></div>
-        <div className="space-y-1.5"><Label htmlFor="stock">Stock quantity *</Label><Input id="stock" name="stock" type="number" min="0" defaultValue={initial?.stock ?? 0} required /></div>
-        <div className="space-y-1.5"><Label htmlFor="rating">Rating (0–5)</Label><Input id="rating" name="rating" type="number" step="0.1" min="0" max="5" defaultValue={initial?.rating ?? 0} /></div>
-        <div className="space-y-1.5 sm:col-span-2"><Label htmlFor="image_url">Product image URL *</Label><Input id="image_url" name="image_url" type="url" defaultValue={initial?.image_url ?? ""} onChange={(e) => setPreview(e.target.value)} required /></div>
+        <div className="space-y-1.5">
+          <Label htmlFor="price">Price (₹) *</Label>
+          <Input
+            id="price"
+            name="price"
+            type="number"
+            step="0.01"
+            min="0"
+            defaultValue={initial?.price}
+            required
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="discount">Discount (%)</Label>
+          <Input
+            id="discount"
+            name="discount"
+            type="number"
+            step="0.01"
+            min="0"
+            max="100"
+            defaultValue={initial?.discount ?? 0}
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="stock">Stock quantity *</Label>
+          <Input
+            id="stock"
+            name="stock"
+            type="number"
+            min="0"
+            defaultValue={initial?.stock ?? 0}
+            required
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="rating">Rating (0–5)</Label>
+          <Input
+            id="rating"
+            name="rating"
+            type="number"
+            step="0.1"
+            min="0"
+            max="5"
+            defaultValue={initial?.rating ?? 0}
+          />
+        </div>
+        <div className="space-y-1.5 sm:col-span-2">
+          <Label htmlFor="image_url">Product image URL *</Label>
+          <Input
+            id="image_url"
+            name="image_url"
+            type="url"
+            defaultValue={initial?.image_url ?? ""}
+            onChange={(e) => setPreview(e.target.value)}
+            required
+          />
+        </div>
         <div className="flex gap-3 sm:col-span-2">
-          <Button type="submit" disabled={busy}>{busy ? "Saving…" : submitLabel}</Button>
-          <Button type="button" variant="outline" asChild><Link to="/admin/products">Cancel</Link></Button>
+          <Button type="submit" disabled={busy}>
+            {busy ? "Saving…" : submitLabel}
+          </Button>
+          <Button type="button" variant="outline" asChild>
+            <Link to="/admin/products">Cancel</Link>
+          </Button>
         </div>
       </div>
       <div className="h-fit rounded-xl border bg-card p-4">

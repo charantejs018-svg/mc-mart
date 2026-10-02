@@ -4,7 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { statusLabel, useRealtime, type OrderStatus } from "@/lib/shop";
 
-export function PageHeader({ title, sub, action }: { title: string; sub?: string; action?: ReactNode }) {
+export function PageHeader({
+  title,
+  sub,
+  action,
+}: {
+  title: string;
+  sub?: string;
+  action?: ReactNode;
+}) {
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>
@@ -57,4 +65,3 @@ export async function setOrderStatus(id: string, status: OrderStatus) {
   if (error) toast.error(error.message);
   else toast.success(`Status updated to ${statusLabel(status)}`);
 }
-

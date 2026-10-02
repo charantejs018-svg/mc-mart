@@ -7,7 +7,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProducts } from "@/lib/shop";
 
 export const Route = createFileRoute("/_authenticated/admin/products/edit/$id")({
-  head: () => ({ meta: [{ title: "Edit Product — ShopKart Admin" }, { name: "description", content: "Edit a ShopKart product." }, { property: "og:title", content: "Edit Product — ShopKart Admin" }, { property: "og:description", content: "Edit a product." }] }),
+  head: () => ({
+    meta: [
+      { title: "Edit Product — ShopKart Admin" },
+      { name: "description", content: "Edit a ShopKart product." },
+      { property: "og:title", content: "Edit Product — ShopKart Admin" },
+      { property: "og:description", content: "Edit a product." },
+    ],
+  }),
   component: EditProduct,
 });
 

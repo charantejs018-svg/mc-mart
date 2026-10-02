@@ -9,7 +9,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/_authenticated/admin/settings")({
-  head: () => ({ meta: [{ title: "Settings — ShopKart Admin" }, { name: "description", content: "ShopKart admin settings." }, { property: "og:title", content: "Settings — ShopKart Admin" }, { property: "og:description", content: "Admin settings." }] }),
+  head: () => ({
+    meta: [
+      { title: "Settings — ShopKart Admin" },
+      { name: "description", content: "ShopKart admin settings." },
+      { property: "og:title", content: "Settings — ShopKart Admin" },
+      { property: "og:description", content: "Admin settings." },
+    ],
+  }),
   component: Settings,
 });
 
@@ -22,11 +29,20 @@ function Settings() {
     const fd = new FormData(e.currentTarget);
     const current = String(fd.get("current") ?? "");
     const next = String(fd.get("next") ?? "");
-    if (next.length < 6) { toast.error("New password must be at least 6 characters"); return; }
+    if (next.length < 6) {
+      toast.error("New password must be at least 6 characters");
+      return;
+    }
     setBusy(true);
-    const { error } = await supabase.auth.updateUser({ password: next, current_password: current } as never);
+    const { error } = await supabase.auth.updateUser({
+      password: next,
+      current_password: current,
+    } as never);
     setBusy(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Password updated");
     e.currentTarget.reset();
   };
@@ -37,7 +53,9 @@ function Settings() {
       <div className="space-y-6">
         <Panel>
           <h2 className="font-semibold">Admin account</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Signed in as <span className="font-medium text-foreground">{user?.email}</span></p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Signed in as <span className="font-medium text-foreground">{user?.email}</span>
+          </p>
         </Panel>
         <Panel>
           <h2 className="mb-4 font-semibold">Store rules</h2>
@@ -50,9 +68,19 @@ function Settings() {
         <Panel>
           <h2 className="mb-4 font-semibold">Change password</h2>
           <form onSubmit={changePassword} className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1.5"><Label htmlFor="current">Current password</Label><Input id="current" name="current" type="password" required /></div>
-            <div className="space-y-1.5"><Label htmlFor="next">New password</Label><Input id="next" name="next" type="password" required minLength={6} /></div>
-            <div><Button type="submit" disabled={busy}>{busy ? "Updating…" : "Update password"}</Button></div>
+            <div className="space-y-1.5">
+              <Label htmlFor="current">Current password</Label>
+              <Input id="current" name="current" type="password" required />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="next">New password</Label>
+              <Input id="next" name="next" type="password" required minLength={6} />
+            </div>
+            <div>
+              <Button type="submit" disabled={busy}>
+                {busy ? "Updating…" : "Update password"}
+              </Button>
+            </div>
           </form>
         </Panel>
       </div>

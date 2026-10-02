@@ -13,7 +13,13 @@ const schema = z.object({
   full_name: z.string().trim().max(100).optional(),
 });
 
-export function AuthForm({ allowRegister, onDone }: { allowRegister?: boolean; onDone: (isAdmin: boolean) => void }) {
+export function AuthForm({
+  allowRegister,
+  onDone,
+}: {
+  allowRegister?: boolean;
+  onDone: (isAdmin: boolean) => void;
+}) {
   const [mode, setMode] = useState<"login" | "register">("login");
   const [busy, setBusy] = useState(false);
 
@@ -25,15 +31,24 @@ export function AuthForm({ allowRegister, onDone }: { allowRegister?: boolean; o
       password: fd.get("password"),
       full_name: mode === "register" ? fd.get("full_name") : undefined,
     });
-    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
-    if (mode === "register" && !parsed.data.full_name) { toast.error("Enter your name"); return; }
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
+      return;
+    }
+    if (mode === "register" && !parsed.data.full_name) {
+      toast.error("Enter your name");
+      return;
+    }
     setBusy(true);
     try {
       if (mode === "register") {
         const { data, error } = await supabase.auth.signUp({
           email: parsed.data.email,
           password: parsed.data.password,
-          options: { emailRedirectTo: window.location.origin, data: { full_name: parsed.data.full_name } },
+          options: {
+            emailRedirectTo: window.location.origin,
+            data: { full_name: parsed.data.full_name },
+          },
         });
         if (error) throw error;
         if (!data.session) {
@@ -59,7 +74,9 @@ export function AuthForm({ allowRegister, onDone }: { allowRegister?: boolean; o
 
   return (
     <form onSubmit={submit} className="space-y-4 rounded-2xl border bg-card p-6 shadow-sm">
-      <h1 className="text-2xl font-bold">{mode === "login" ? "Welcome back" : "Create your account"}</h1>
+      <h1 className="text-2xl font-bold">
+        {mode === "login" ? "Welcome back" : "Create your account"}
+      </h1>
       {mode === "register" && (
         <div className="space-y-1.5">
           <Label htmlFor="full_name">Full name</Label>
@@ -72,7 +89,14 @@ export function AuthForm({ allowRegister, onDone }: { allowRegister?: boolean; o
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="password">Password</Label>
-        <Input id="password" name="password" type="password" required minLength={6} autoComplete={mode === "login" ? "current-password" : "new-password"} />
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          required
+          minLength={6}
+          autoComplete={mode === "login" ? "current-password" : "new-password"}
+        />
       </div>
       <Button type="submit" className="w-full" disabled={busy}>
         {busy ? "Please wait…" : mode === "login" ? "Login" : "Register"}
@@ -80,7 +104,11 @@ export function AuthForm({ allowRegister, onDone }: { allowRegister?: boolean; o
       {allowRegister && (
         <p className="text-center text-sm text-muted-foreground">
           {mode === "login" ? "New to ShopKart? " : "Already have an account? "}
-          <button type="button" className="font-semibold text-primary" onClick={() => setMode(mode === "login" ? "register" : "login")}>
+          <button
+            type="button"
+            className="font-semibold text-primary"
+            onClick={() => setMode(mode === "login" ? "register" : "login")}
+          >
             {mode === "login" ? "Register" : "Login"}
           </button>
         </p>
