@@ -8,11 +8,11 @@ type Search = { q?: string | undefined; category?: string | undefined; min?: num
 
 export const Route = createFileRoute("/products/")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    q: typeof s.q === "string" ? s.q : undefined,
-    category: typeof s.category === "string" ? s.category : undefined,
-    min: s.min ? Number(s.min) : undefined,
-    max: s.max ? Number(s.max) : undefined,
-    sort: typeof s.sort === "string" ? s.sort : undefined,
+    q: typeof s["q"] === "string" ? s["q"] : undefined,
+    category: typeof s["category"] === "string" ? s["category"] : undefined,
+    min: s["min"] ? Number(s["min"]) : undefined,
+    max: s["max"] ? Number(s["max"]) : undefined,
+    sort: typeof s["sort"] === "string" ? s["sort"] : undefined,
   }),
   head: () => ({
     meta: [
