@@ -6,34 +6,13 @@ import { StoreShell } from "@/components/store/StoreShell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { deliveryFee, finalPrice, inr, useCart } from "@/lib/shop";
+import { finalPrice, inr } from "@/lib/shop";
+import { Summary, useCartTotals } from "@/components/store/order-bits";
 
 export const Route = createFileRoute("/_authenticated/cart")({
   head: () => ({ meta: [{ title: "Your Cart — ShopKart" }, { name: "description", content: "Review items in your ShopKart cart." }, { property: "og:title", content: "Your Cart — ShopKart" }, { property: "og:description", content: "Review items in your cart." }] }),
   component: CartPage,
 });
-
-export function useCartTotals(userId?: string) {
-  const { data: cart, isLoading } = useCart(userId);
-  const items = cart ?? [];
-  const mrp = items.reduce((s, c) => s + Number(c.products.price) * c.quantity, 0);
-  const subtotal = items.reduce((s, c) => s + finalPrice({ price: Number(c.products.price), discount: Number(c.products.discount) }) * c.quantity, 0);
-  const fee = deliveryFee(subtotal);
-  return { items, isLoading, mrp, discount: mrp - subtotal, subtotal, fee, total: subtotal + fee };
-}
-
-export function Summary({ t }: { t: ReturnType<typeof useCartTotals> }) {
-  const row = "flex justify-between text-sm";
-  return (
-    <div className="space-y-2">
-      <div className={row}><span>Price (MRP)</span><span>{inr(t.mrp)}</span></div>
-      <div className={`${row} text-success`}><span>Discount</span><span>−{inr(t.discount)}</span></div>
-      <div className={row}><span>Subtotal</span><span>{inr(t.subtotal)}</span></div>
-      <div className={row}><span>Delivery fee</span><span>{t.fee === 0 ? "FREE" : inr(t.fee)}</span></div>
-      <div className="flex justify-between border-t pt-3 font-display text-lg font-bold"><span>Total</span><span>{inr(t.total)}</span></div>
-    </div>
-  );
-}
 
 function CartPage() {
   const { user } = useAuth();

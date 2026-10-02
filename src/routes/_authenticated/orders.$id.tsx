@@ -1,55 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { Check, XCircle } from "lucide-react";
 import { StoreShell } from "@/components/store/StoreShell";
-import { supabase } from "@/integrations/supabase/client";
-import { inr, ORDER_STEPS, paymentLabel, statusLabel, statusTone, useRealtime } from "@/lib/shop";
+import { inr, paymentLabel, statusLabel, statusTone } from "@/lib/shop";
+import { Tracker, useOrder } from "@/components/store/order-bits";
 
 export const Route = createFileRoute("/_authenticated/orders/$id")({
   head: () => ({ meta: [{ title: "Track Order — ShopKart" }, { name: "description", content: "Track the status of your ShopKart order." }, { property: "og:title", content: "Track Order — ShopKart" }, { property: "og:description", content: "Track your order." }] }),
   component: TrackOrder,
 });
-
-export function useOrder(id: string) {
-  useRealtime("orders", [["orders"]]);
-  return useQuery({
-    queryKey: ["orders", "one", id],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("orders").select("*, order_items(*)").eq("id", id).maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-  });
-}
-
-export function Tracker({ status }: { status: string }) {
-  if (status === "cancelled")
-    return (
-      <div className="flex items-center gap-3 rounded-2xl bg-destructive/10 p-5 font-semibold text-destructive">
-        <XCircle className="h-6 w-6" /> This order was cancelled.
-      </div>
-    );
-  const idx = ORDER_STEPS.findIndex((s) => s.key === status);
-  return (
-    <ol className="grid gap-4 sm:grid-cols-6">
-      {ORDER_STEPS.map((s, i) => {
-        const done = i <= idx;
-        const current = i === idx;
-        return (
-          <li key={s.key} className="flex items-center gap-3 sm:flex-col sm:text-center">
-            <div className="relative flex w-full items-center sm:justify-center">
-              {i > 0 && <span className={`absolute right-1/2 hidden h-1 w-full -translate-y-0 sm:block ${i <= idx ? "bg-primary" : "bg-border"}`} />}
-              <span className={`relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 font-bold ${done ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"} ${current ? "ring-4 ring-primary/25" : ""}`}>
-                {done ? <Check className="h-5 w-5" /> : i + 1}
-              </span>
-            </div>
-            <span className={`text-sm ${current ? "font-bold text-primary" : done ? "font-semibold" : "text-muted-foreground"}`}>{s.label}</span>
-          </li>
-        );
-      })}
-    </ol>
-  );
-}
 
 function TrackOrder() {
   const { id } = Route.useParams();

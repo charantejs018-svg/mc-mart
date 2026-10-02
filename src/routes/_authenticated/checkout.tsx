@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Summary, useCartTotals } from "./cart";
+import { Summary, useCartTotals } from "@/components/store/order-bits";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
   head: () => ({ meta: [{ title: "Checkout — ShopKart" }, { name: "description", content: "Enter shipping details and place your ShopKart order." }, { property: "og:title", content: "Checkout — ShopKart" }, { property: "og:description", content: "Place your order." }] }),
