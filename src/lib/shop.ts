@@ -116,3 +116,13 @@ export async function addToCart(userId: string, productId: string, qty: number) 
     if (error) throw error;
   }
 }
+
+export type Ship = {
+  full_name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
+};

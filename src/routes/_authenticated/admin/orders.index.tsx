@@ -1,3 +1,4 @@
+import type { Ship } from "@/lib/shop";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, Eye } from "lucide-react";
@@ -21,7 +22,7 @@ function AdminOrders() {
   const list = useMemo(
     () =>
       orders.filter((o) => {
-        const s = o.shipping_address as Record<string, string>;
+        const s = o.shipping_address as Ship;
         const hay = `${o.id} ${s.full_name} ${s.email}`.toLowerCase();
         return hay.includes(q.toLowerCase()) && (!status || o.status === status);
       }),
@@ -50,7 +51,7 @@ function AdminOrders() {
             <tbody>
               {isLoading && <tr><td colSpan={9} className="py-6 text-center text-muted-foreground">Loading…</td></tr>}
               {list.map((o) => {
-                const s = o.shipping_address as Record<string, string>;
+                const s = o.shipping_address as Ship;
                 return (
                   <tr key={o.id} className="border-t align-top">
                     <td className="py-3 font-mono font-semibold">#{o.id.slice(0, 8).toUpperCase()}</td>

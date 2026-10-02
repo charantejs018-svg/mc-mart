@@ -35,11 +35,11 @@ function Profile() {
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const parsed = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
     setBusy(true);
     const { error } = await supabase.from("profiles").update(parsed.data).eq("id", user!.id);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["profile"] });
     toast.success("Profile updated");
   };

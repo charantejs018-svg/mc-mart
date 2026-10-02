@@ -45,13 +45,13 @@ function Checkout() {
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const parsed = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
     setBusy(true);
     // Demo payment processing
     await new Promise((r) => setTimeout(r, method === "cod" ? 300 : 1200));
     const { data, error } = await supabase.rpc("place_order", { _payment_method: method, _shipping: parsed.data });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["cart"] });
     qc.invalidateQueries({ queryKey: ["products"] });
     qc.invalidateQueries({ queryKey: ["orders"] });

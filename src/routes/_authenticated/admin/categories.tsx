@@ -34,12 +34,12 @@ function Categories() {
   const save = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const parsed = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
     const { error } =
       editing === "new"
         ? await supabase.from("categories").insert(parsed.data)
         : await supabase.from("categories").update(parsed.data).eq("id", (editing as Category).id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(editing === "new" ? "Category added" : "Category updated");
     setEditing(null);
     qc.invalidateQueries({ queryKey: ["categories"] });

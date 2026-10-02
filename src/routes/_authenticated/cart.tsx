@@ -21,7 +21,7 @@ function CartPage() {
 
   const setQty = async (id: string, q: number, stock: number) => {
     if (q < 1) return;
-    if (q > stock) return toast.error("Not enough stock");
+    if (q > stock) { toast.error("Not enough stock"); return; }
     const { error } = await supabase.from("cart_items").update({ quantity: q }).eq("id", id);
     if (error) toast.error(error.message);
     qc.invalidateQueries({ queryKey: ["cart"] });

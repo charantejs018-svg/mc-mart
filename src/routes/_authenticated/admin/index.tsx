@@ -1,3 +1,4 @@
+import type { Ship } from "@/lib/shop";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Package, Users, ShoppingBag, IndianRupee, Clock, CheckCircle2 } from "lucide-react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -104,7 +105,7 @@ function Dashboard() {
               {orders.slice(0, 6).map((o) => (
                 <tr key={o.id} className="border-t">
                   <td className="py-2.5"><Link to="/admin/orders/$id" params={{ id: o.id }} className="font-mono font-semibold text-primary">#{o.id.slice(0, 8).toUpperCase()}</Link></td>
-                  <td>{(o.shipping_address as Record<string, string>).full_name}</td>
+                  <td>{(o.shipping_address as Ship).full_name}</td>
                   <td>{new Date(o.created_at).toLocaleDateString("en-IN")}</td>
                   <td>{inr(Number(o.total_amount))}</td>
                   <td><span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${statusTone(o.status)}`}>{statusLabel(o.status)}</span></td>

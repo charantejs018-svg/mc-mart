@@ -25,8 +25,8 @@ export function AuthForm({ allowRegister, onDone }: { allowRegister?: boolean; o
       password: fd.get("password"),
       full_name: mode === "register" ? fd.get("full_name") : undefined,
     });
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
-    if (mode === "register" && !parsed.data.full_name) return toast.error("Enter your name");
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
+    if (mode === "register" && !parsed.data.full_name) { toast.error("Enter your name"); return; }
     setBusy(true);
     try {
       if (mode === "register") {

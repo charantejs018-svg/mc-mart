@@ -1,3 +1,4 @@
+import type { Ship } from "@/lib/shop";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { StoreShell } from "@/components/store/StoreShell";
 import { inr, paymentLabel, statusLabel, statusTone } from "@/lib/shop";
@@ -13,7 +14,7 @@ function TrackOrder() {
   const { data: o, isLoading } = useOrder(id);
   if (isLoading) return <StoreShell><p className="p-10 text-center text-muted-foreground">Loading…</p></StoreShell>;
   if (!o) return <StoreShell><p className="p-10 text-center">Order not found. <Link to="/orders" className="text-primary">My orders</Link></p></StoreShell>;
-  const ship = o.shipping_address as Record<string, string>;
+  const ship = o.shipping_address as Ship;
   return (
     <StoreShell>
       <div className="mx-auto max-w-5xl px-4 py-10">

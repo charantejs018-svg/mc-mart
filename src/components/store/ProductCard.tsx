@@ -13,7 +13,7 @@ export function ProductCard({ p }: { p: Product }) {
 
   const add = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!user) return navigate({ to: "/auth" });
+    if (!user) { navigate({ to: "/auth" }); return; }
     try {
       await addToCart(user.id, p.id, 1);
       qc.invalidateQueries({ queryKey: ["cart"] });

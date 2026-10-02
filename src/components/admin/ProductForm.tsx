@@ -28,7 +28,7 @@ export function ProductForm({ initial, submitLabel, onSubmit }: { initial?: Prod
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const parsed = productSchema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
-    if (!parsed.success) return toast.error(parsed.error.issues[0].message);
+    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Invalid input"); return; }
     setBusy(true);
     try {
       await onSubmit(parsed.data);

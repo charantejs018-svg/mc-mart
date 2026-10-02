@@ -39,9 +39,9 @@ function AdminProducts() {
   );
 
   const updateStock = async (p: Product, stock: number) => {
-    if (!Number.isInteger(stock) || stock < 0) return toast.error("Invalid stock");
+    if (!Number.isInteger(stock) || stock < 0) { toast.error("Invalid stock"); return; }
     const { error } = await supabase.from("products").update({ stock }).eq("id", p.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["products"] });
     toast.success(`Stock updated for ${p.name}`);
   };

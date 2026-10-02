@@ -43,7 +43,7 @@ function ProductDetail() {
   const price = finalPrice({ price: Number(p.price), discount: Number(p.discount) });
 
   const add = async (buyNow: boolean) => {
-    if (!user) return navigate({ to: "/auth" });
+    if (!user) { navigate({ to: "/auth" }); return; }
     try {
       await addToCart(user.id, p.id, qty);
       await qc.invalidateQueries({ queryKey: ["cart"] });

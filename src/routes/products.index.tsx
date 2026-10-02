@@ -4,7 +4,7 @@ import { StoreShell } from "@/components/store/StoreShell";
 import { ProductCard } from "@/components/store/ProductCard";
 import { finalPrice, useCategories, useProducts } from "@/lib/shop";
 
-type Search = { q?: string; category?: string; min?: number; max?: number; sort?: string };
+type Search = { q?: string | undefined; category?: string | undefined; min?: number | undefined; max?: number | undefined; sort?: string | undefined };
 
 export const Route = createFileRoute("/products/")({
   validateSearch: (s: Record<string, unknown>): Search => ({

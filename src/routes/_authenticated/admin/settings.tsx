@@ -22,11 +22,11 @@ function Settings() {
     const fd = new FormData(e.currentTarget);
     const current = String(fd.get("current") ?? "");
     const next = String(fd.get("next") ?? "");
-    if (next.length < 6) return toast.error("New password must be at least 6 characters");
+    if (next.length < 6) { toast.error("New password must be at least 6 characters"); return; }
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password: next, current_password: current } as never);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Password updated");
     e.currentTarget.reset();
   };

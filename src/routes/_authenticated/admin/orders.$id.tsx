@@ -1,3 +1,4 @@
+import type { Ship } from "@/lib/shop";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { PageHeader, Panel, setOrderStatus } from "@/components/admin/bits";
@@ -15,7 +16,7 @@ function AdminOrderDetail() {
   const qc = useQueryClient();
   if (isLoading) return <p className="text-muted-foreground">Loading…</p>;
   if (!o) return <p>Order not found.</p>;
-  const s = o.shipping_address as Record<string, string>;
+  const s = o.shipping_address as Ship;
 
   return (
     <div>
