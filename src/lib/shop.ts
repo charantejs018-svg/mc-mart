@@ -137,6 +137,7 @@ export type Ship = {
   state: string;
   pincode: string;
 };
+<<<<<<< HEAD
 
 export type Order = Database["public"]["Tables"]["orders"]["Row"];
 export type OrderItem = Database["public"]["Tables"]["order_items"]["Row"];
@@ -216,3 +217,5 @@ export function useOrderStats(userId?: string) {
   };
 }
 
+=======
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d

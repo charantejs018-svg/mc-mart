@@ -1,9 +1,16 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+<<<<<<< HEAD
 import { ArrowLeft, ShieldCheck, Truck, PackageCheck, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { AuthForm } from "@/components/AuthForm";
 import { supabase } from "@/integrations/supabase/client";
 import loginBanner from "@/assets/login-banner.jpg";
+=======
+import { ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
+import { AuthForm } from "@/components/AuthForm";
+import { supabase } from "@/integrations/supabase/client";
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d
 
 export const Route = createFileRoute("/admin-login")({
   head: () => ({
@@ -19,6 +26,7 @@ export const Route = createFileRoute("/admin-login")({
 
 function AdminLogin() {
   const navigate = useNavigate();
+<<<<<<< HEAD
 
   return (
     <div className="admin-theme min-h-screen bg-muted/30">
@@ -184,8 +192,33 @@ function AdminLogin() {
             ShopKart Security • Protected by row-level access verification
           </div>
         </div>
+=======
+  return (
+    <div className="admin-theme grid min-h-screen place-items-center bg-sidebar px-4">
+      <div className="w-full max-w-md">
+        <div className="mb-6 flex items-center justify-center gap-2 text-sidebar-foreground">
+          <ShieldCheck className="h-7 w-7 text-sidebar-primary" />
+          <span className="font-display text-2xl font-bold">ShopKart Admin</span>
+        </div>
+        <AuthForm
+          onDone={async (isAdmin) => {
+            if (!isAdmin) {
+              await supabase.auth.signOut();
+              toast.error("This account does not have admin access.");
+              return;
+            }
+            navigate({ to: "/admin" });
+          }}
+        />
+        <p className="mt-4 text-center text-sm text-sidebar-foreground/70">
+          <Link to="/">← Back to store</Link>
+        </p>
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d
       </div>
     </div>
   );
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d

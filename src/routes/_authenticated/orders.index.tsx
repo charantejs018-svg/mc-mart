@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Package, Truck, CheckCircle2, XCircle, Clock } from "lucide-react";
@@ -12,6 +13,16 @@ import {
   useUserOrders,
   type OrderStatus,
 } from "@/lib/shop";
+=======
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { Package } from "lucide-react";
+import { StoreShell } from "@/components/store/StoreShell";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
+import { inr, paymentLabel, statusLabel, statusTone, useRealtime } from "@/lib/shop";
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d
 
 export const Route = createFileRoute("/_authenticated/orders/")({
   head: () => ({
@@ -25,6 +36,7 @@ export const Route = createFileRoute("/_authenticated/orders/")({
   component: MyOrders,
 });
 
+<<<<<<< HEAD
 type FilterTab = "all" | "active" | "delivered" | "cancelled";
 
 function MyOrders() {
@@ -123,10 +135,40 @@ function MyOrders() {
             <p className="mt-1 text-sm text-muted-foreground">
               When you purchase items, your orders and tracking status will appear here.
             </p>
+=======
+function MyOrders() {
+  const { user } = useAuth();
+  useRealtime("orders", [["orders"]]);
+  const { data, isLoading } = useQuery({
+    queryKey: ["orders", "mine", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*, order_items(product_name, quantity)")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  return (
+    <StoreShell>
+      <div className="mx-auto max-w-5xl px-4 py-10">
+        <h1 className="text-3xl font-bold">My orders</h1>
+        {isLoading ? (
+          <p className="mt-6 text-muted-foreground">Loading…</p>
+        ) : !data?.length ? (
+          <div className="mt-8 rounded-3xl border bg-card p-14 text-center">
+            <Package className="mx-auto h-12 w-12 text-muted-foreground" />
+            <p className="mt-4 font-semibold">No orders yet</p>
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d
             <Button asChild className="mt-5 rounded-full">
               <Link to="/products">Shop now</Link>
             </Button>
           </div>
+<<<<<<< HEAD
         ) : !filteredOrders.length ? (
           <div className="mt-8 rounded-2xl border bg-card/60 p-10 text-center text-muted-foreground">
             No orders found under &quot;{filter}&quot;.
@@ -182,6 +224,32 @@ function MyOrders() {
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-2">
                   <p className="text-sm text-muted-foreground">
                     Total:{" "}
+=======
+        ) : (
+          <ul className="mt-6 space-y-4">
+            {data.map((o) => (
+              <li key={o.id} className="rounded-2xl border bg-card p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-sm font-semibold">
+                      #{o.id.slice(0, 8).toUpperCase()}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(o.created_at).toLocaleString("en-IN")}
+                    </p>
+                  </div>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-bold ${statusTone(o.status)}`}
+                  >
+                    {statusLabel(o.status)}
+                  </span>
+                </div>
+                <p className="mt-3 text-sm">
+                  {o.order_items.map((i) => `${i.product_name} × ${i.quantity}`).join(", ")}
+                </p>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                  <p className="text-sm text-muted-foreground">
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d
                     <span className="font-display text-lg font-bold text-foreground">
                       {inr(Number(o.total_amount))}
                     </span>{" "}
@@ -189,7 +257,11 @@ function MyOrders() {
                   </p>
                   <Button asChild size="sm" variant="outline" className="rounded-full">
                     <Link to="/orders/$id" params={{ id: o.id }}>
+<<<<<<< HEAD
                       Track Order →
+=======
+                      Track Order
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d
                     </Link>
                   </Button>
                 </div>
@@ -201,4 +273,7 @@ function MyOrders() {
     </StoreShell>
   );
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> d6d63d17ae872d574523a28a00253918fd95352d
